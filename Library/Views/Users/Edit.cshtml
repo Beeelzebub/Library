@@ -1,0 +1,77 @@
+﻿@model Library.ViewModels.UserViewModel
+@{
+    ViewBag.Title = "Редактирование пользователя";
+}
+<form asp-action="Edit" asp-controller="Users">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <input type="hidden" asp-for="Id" />
+    </div>
+    <div class="form-group">
+        <input type="hidden" asp-for="Role" />
+    </div>
+    <div class="form-group">
+        <input type="hidden" asp-for="Password" value="-"/>
+    </div>
+    @{
+        if (Model.Role.Equals("reader"))
+        {
+            <div>
+                <label asp-for="FirstName"></label><br />
+                <input asp-for="FirstName" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
+            <div>
+                <label asp-for="SecondName"></label><br />
+                <input asp-for="SecondName" />
+                <span asp-validation-for="SecondName"></span>
+            </div>
+            <div>
+                <label asp-for="Phone"></label><br />
+                <input asp-for="Phone" />
+                <span asp-validation-for="Phone"></span>
+            </div>
+            <div>
+                <label asp-for="City"></label><br />
+                <input asp-for="City" />
+                <span asp-validation-for="City"></span>
+            </div>
+            <div>
+                <label asp-for="Street"></label><br />
+                <input asp-for="Street" />
+                <span asp-validation-for="Street"></span>
+            </div>
+            <div>
+                <label asp-for="Hous"></label><br />
+                <input asp-for="Hous" />
+                <span asp-validation-for="Hous"></span>
+            </div>
+            <div>
+                <label asp-for="UserName"></label><br />
+                <input asp-for="UserName" />
+                <span asp-validation-for="UserName"></span>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input type="text" asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecondName" class="control-label"></label>
+                <input type="text" asp-for="SecondName" class="form-control" />
+                <span asp-validation-for="SecondName"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input type="text" asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName"></span>
+            </div>
+        }
+    }
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+    </div>
+</form>
