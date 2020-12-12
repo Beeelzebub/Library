@@ -26,9 +26,8 @@ namespace Library
                 {
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    var dataManager = services.GetRequiredService<ApplicationDbContext>();
 
-                    await DataInitializer.InitializeAsync(userManager, rolesManager, dataManager);
+                    await RoleInitializer.InitializeAsync(userManager, rolesManager);
                 }
                 catch (Exception ex)
                 {

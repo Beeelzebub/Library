@@ -25,13 +25,17 @@ namespace Library.Data
             Database.EnsureCreated();
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UsageStatus>().HasData(
+                new UsageStatus[]
+                {
+                    new UsageStatus { Id = 1, Name = "бронь"},
+                    new UsageStatus { Id = 2, Name = "активен"},
+                    new UsageStatus { Id = 3, Name = "закрыт"},
+                });
 
-
-
-
-
-
-
-
+        }
     }
 }

@@ -6,42 +6,58 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("librarian"))
+{
+    <p>
+        <a asp-controller="Books" asp-action="Create">Добавить книгу</a>
+        <a asp-controller="Authors" asp-action="Create">Добавить автора</a>
+        <a asp-controller="BookCopies" asp-action="Create">Добавить копию книги</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Название
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                Год
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                Автор
+            </th>
+            <th>
+                Количество
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Year
+                </td>
+                <td>
+                    @item.Author.FirstName @item.Author.SecondName
+                </td>
+                <td>
+                    @item.BookCopies.Count
+                </td>
+                <td>
+                    @if (User.IsInRole("librarian"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    <a asp-controller="BookCopies" asp-action="Index" asp-route-id="@item.Id">Выбрать</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

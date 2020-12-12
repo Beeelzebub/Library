@@ -8,17 +8,12 @@ using Library.Data;
 
 namespace Library
 {
-    public class DataInitializer
+    public class RoleInitializer
     {
-        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dataManager)
+        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             string adminLogin = "admin";
             string password = "admin";
-            
-            //if (dataManager.BookStatuses.ToList().Where(p => p.Name == "свободна") == null)
-            //{
-
-            //}
 
             if (await roleManager.FindByNameAsync("admin") == null)
             {
