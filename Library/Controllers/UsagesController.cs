@@ -210,6 +210,10 @@ namespace Library.Controllers
 
             usage.EndLibrarian = librarian;
 
+            var book = await _context.BookCopies.FindAsync(usage.BookCopyId);
+            book.IsInStock = true;
+            _context.BookCopies.Update(book);
+
             _context.Usages.Update(usage);
             await _context.SaveChangesAsync();
 
