@@ -2,31 +2,34 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    color: #6e7585;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Provide sufficient contrast against white background */
 a {
-    color: #0366d6;
+    text-decoration-style: none;
+    color: #6e7585;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background: linear-gradient(to left bottom, rgb(118, 196, 226,0.5), rgb(129, 118, 181,0.5));
+    border-color: #6e7585;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background:linear-gradient(to left bottom, rgb(118, 196, 226), rgb(129, 118, 181));
+    border-color: #6e7585;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
+    text-align:center;
   font-size: 14px;
 }
 @media (min-width: 768px) {
@@ -43,7 +46,7 @@ html {
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
@@ -54,13 +57,17 @@ button.accept-policy {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    text-align:center;
+    background: linear-gradient(to left bottom, rgb(118, 196, 226), rgb(129, 118, 181));
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    border-radius: 0 0 20px 20px;
+    text-align: center;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
 .footer {
   position: absolute;
@@ -69,3 +76,34 @@ body {
   white-space: nowrap;/***/
   line-height: 60px; /* Vertically center the text there */
 }
+table {
+    font-weight:100;
+    text-align:center;
+    background: linear-gradient(to left bottom, rgb(118, 196, 226,0.2), rgb(129, 118, 181,0.2));
+    border-radius:0 0 20px 20px;
+}
+
+input {
+    margin:10px;
+    text-align:center;
+    border-radius: 5px 5px 5px 5px;
+    background: linear-gradient(to left bottom, rgb(118, 196, 226,0.2), rgb(129, 118, 181,0.2));
+}
+
+h2 {
+font-weight:100;
+}
+
+
+
+.form-control {
+    background: linear-gradient(to left bottom, rgb(118, 196, 226,0.2), rgb(129, 118, 181,0.2));
+
+}
+
+ .form-control::after{
+    background-color:firebrick;
+    }
+  select#avtor {
+      background-color:red;
+  }
