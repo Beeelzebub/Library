@@ -1,13 +1,19 @@
-﻿@if (User.Identity.IsAuthenticated)
-{
-    <p>@User.Identity.Name</p>
-
-    <form method="post" asp-controller="Account" asp-action="Logout">
-        <input type="submit" value="Выход" />
-    </form>
-}
-else
-{
-    <a asp-controller="Account" asp-action="Login">Вход</a>
-    <a asp-controller="Account" asp-action="Register">Регистрация</a>
-}
+﻿<h1 class="mb-3">
+    Добро пожаловать <br /> в электронную библиотеку Вельзевул!
+</h1>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-8">
+        <p class="mt-3">
+            Мы рады видеть вас здесь. Вы можете заказать книгу после регистраци :)
+        <p>
+            За несвоевременную сдачу книг штраф и лишение свободы по мере тяжести(12 лет а Азкабане, 5 лет Сизифова труда).
+        </p>
+        <p>
+            Немного о создатеях:
+            Ответственный за умственную работу, интелект, музыкальную часть, филосовские изыскания <a href="https://vk.com/spontus"> Александр Понтус </a>, за эстетику, моральную поддержку, разговоры с аленьким цветочком
+            <a href="https://vk.com/ranejeb"> Анастасия Беженарь</a>.
+            Студенты 3 курса ПОИТА самого лучшего факультета
+        </p>
+    </div>
+</div>

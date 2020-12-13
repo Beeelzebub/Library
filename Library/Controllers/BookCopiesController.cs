@@ -9,6 +9,7 @@ using Library.Data;
 using Library.Models;
 using Library.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.Controllers
 {
@@ -21,14 +22,14 @@ namespace Library.Controllers
             _context = context;
         }
 
-        // GET: BookCopies
+        
         public async Task<IActionResult> Index(int id)
         {
             var applicationDbContext = _context.BookCopies.Where(b => b.BookId == id).Include(b => b.Book).Include(b => b.Picture);
             ViewData["BookTitle"] = _context.Books.Find(id).Title; 
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> Book(string userName, int bookId)
         {
             var reader = _context.Readers.Where(r => r.User.UserName == userName)
@@ -61,7 +62,7 @@ namespace Library.Controllers
             return RedirectToAction("Index", "Usages");
         }
 
-        // GET: BookCopies/Details/5
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -81,17 +82,15 @@ namespace Library.Controllers
             return View(bookCopy);
         }
 
-        // GET: BookCopies/Create
+        [Authorize(Roles = "librarian")]
         public IActionResult Create()
         {
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
             return View();
         }
 
-        // POST: BookCopies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "librarian")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookCopyViewModel model)
         {
@@ -131,7 +130,7 @@ namespace Library.Controllers
             return View(model);
         }
 
-        // GET: BookCopies/Edit/5
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -149,10 +148,8 @@ namespace Library.Controllers
             return View(bookCopy);
         }
 
-        // POST: BookCopies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "librarian")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BookId,Notes,IsInStock,PictureId")] BookCopy bookCopy)
         {
@@ -186,6 +183,7 @@ namespace Library.Controllers
             return View(bookCopy);
         }
 
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

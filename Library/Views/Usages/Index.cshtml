@@ -4,8 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Активные заказы</h1>
+<hr />
 <table class="table">
     <thead>
         <tr>
@@ -98,10 +98,12 @@
                     @if (item.UsageStatusId == 1)
                     {
                         <a asp-action="GetBook" asp-route-id="@item.Id">Выдана</a>
+                        <span> / </span>
                     }
                     else if (item.UsageStatusId == 2)
                     {
                         <a asp-action="GetBackBook" asp-route-id="@item.Id">Сдана</a>
+                        <span> / </span>
                     }
                     <a asp-action="Delete" asp-route-id="@item.Id">Отменить</a>
                 </td>

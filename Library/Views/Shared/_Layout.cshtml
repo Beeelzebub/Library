@@ -3,15 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Library</title>
+    <title>@ViewData["Title"] - BelzebubLibrary</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Library</a>
+
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BelzebubLibrary</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,16 +27,16 @@
                             if (User.IsInRole("admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Управление пользователями</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index"> Управление </a>
                                 </li>
                             }
                             else if (User.IsInRole("librarian"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usages" asp-action="Index">Контроль заказов</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usages" asp-action="Index"> Контроль </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usages" asp-action="History">История заказов</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usages" asp-action="History"> История </a>
                                 </li>
                             }
                             else if (User.IsInRole("reader"))
@@ -46,18 +48,51 @@
                         }
                     </ul>
                 </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+
+                            <li class="navbar-item">
+                                <span class="navbar-text text-dark">@User.Identity.Name /</span>
+                            </li>
+                            <li class="navbar-item">
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <button class="btn btn-link nav-link pl-1"> Выход </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="navbar-item">
+                                <a asp-controller="Account" asp-action="Login">
+                                    <button class="btn btn-outline-info my-2 my-sm-0">Вход</button>
+                                </a>
+                            </li>
+                            <li class="navbar-item">
+                                <a asp-controller="Account" asp-action="Register" class="nav-link">Нет аккаунта?</a>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
             </div>
+
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class="container-fluid">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - Library - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container text-dark">
+            &copy; 2020 - Library - <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

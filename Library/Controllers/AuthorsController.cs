@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library.Data;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.Controllers
 {
@@ -19,13 +20,13 @@ namespace Library.Controllers
             _context = context;
         }
 
-        // GET: Authors
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Authors.ToListAsync());
         }
 
-        // GET: Authors/Details/5
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,17 +45,16 @@ namespace Library.Controllers
             return View(author);
         }
 
-        // GET: Authors/Create
+        [Authorize(Roles = "librarian")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Authors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Create([Bind("Id,FirstName,SecondName,BirthYear,DeathYear")] Author author)
         {
             if (ModelState.IsValid)
@@ -66,7 +66,7 @@ namespace Library.Controllers
             return View(author);
         }
 
-        // GET: Authors/Edit/5
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,9 +82,7 @@ namespace Library.Controllers
             return View(author);
         }
 
-        // POST: Authors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "librarian")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,SecondName,BirthYear,DeathYear")] Author author)
@@ -117,7 +115,7 @@ namespace Library.Controllers
             return View(author);
         }
 
-        // GET: Authors/Delete/5
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,7 +133,7 @@ namespace Library.Controllers
             return View(author);
         }
 
-        // POST: Authors/Delete/5
+        [Authorize(Roles = "librarian")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

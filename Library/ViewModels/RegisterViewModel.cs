@@ -9,36 +9,36 @@ namespace Library.ViewModels
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "Имя*")]
+        [Display(Name = "Имя")]
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Фамилия*")]
+        [Display(Name = "Фамилия")]
         public string SecondName { get; set; }
 
         [Required]
-        [Display(Name = "Город*")]
+        [Display(Name = "Город")]
         public string City { get; set; }
 
         [Required]
-        [Display(Name = "Улица*")]
+        [Display(Name = "Улица")]
         public string Street { get; set; }
 
         [Required]
-        [Display(Name = "Дом*")]
+        [Display(Name = "Дом")]
         public int Hous { get; set; }
 
         [Required]
-        [Display(Name = "Телефон*")]
+        [Display(Name = "Телефон")]
         public int Phone { get; set; }
 
         [Required]
-        [Display(Name = "Логин*")]
+        [Display(Name = "Логин")]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль*")]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
         [Required]

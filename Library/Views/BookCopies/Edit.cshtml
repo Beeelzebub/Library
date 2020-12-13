@@ -4,32 +4,32 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Изменение</h1>
 
-<h4>BookCopy</h4>
+<h4>Копии книги</h4>
 <hr />
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="BookId" class="control-label"></label>
+                <label asp-for="BookId" class="control-label">Книга</label>
                 <select asp-for="BookId" class="form-control" asp-items="ViewBag.BookId"></select>
                 <span asp-validation-for="BookId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
+                <label asp-for="Notes" class="control-label">Описание</label>
                 <input asp-for="Notes" class="form-control" />
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
-                <label class="form-check-label">
+                <label asp-for="IsInStock" class="form-check-label"> В наличии? 
                     <input class="form-check-input" asp-for="IsInStock" /> @Html.DisplayNameFor(model => model.IsInStock)
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="PictureId" class="control-label"></label>
+                <label asp-for="PictureId" class="control-label">Обложка</label>
                 <select asp-for="PictureId" class="form-control" asp-items="ViewBag.PictureId"></select>
                 <span asp-validation-for="PictureId" class="text-danger"></span>
             </div>
@@ -41,7 +41,7 @@
 </div>
 
 <div>
-    <a asp-controller="Book" asp-action="Index">Back to List</a>
+    <a asp-controller="Book" asp-action="Index">Вернуться к списку</a>
 </div>
 
 @section Scripts {

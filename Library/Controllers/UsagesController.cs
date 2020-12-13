@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library.Data;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.Controllers
 {
@@ -19,7 +20,7 @@ namespace Library.Controllers
             _context = context;
         }
 
-        // GET: Usages
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("reader"))
@@ -54,7 +55,7 @@ namespace Library.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: Usages/Details/5
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -77,7 +78,7 @@ namespace Library.Controllers
             return View(usage);
         }
 
-        // GET: Usages/Create
+        [Authorize(Roles = "librarian")]
         public IActionResult Create()
         {
             ViewData["BookCopyId"] = new SelectList(_context.BookCopies, "Id", "Id");
@@ -88,10 +89,8 @@ namespace Library.Controllers
             return View();
         }
 
-        // POST: Usages/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "librarian")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,BookCopyId,StartDate,EndDate,StartLibrarianId,EndLibrarianId,ReaderId,UsageStatusId")] Usage usage)
         {
@@ -109,7 +108,7 @@ namespace Library.Controllers
             return View(usage);
         }
 
-        // GET: Usages/Edit/5
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -130,10 +129,8 @@ namespace Library.Controllers
             return View(usage);
         }
 
-        // POST: Usages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "librarian")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BookCopyId,StartDate,EndDate,StartLibrarianId,EndLibrarianId,ReaderId,UsageStatusId")] Usage usage)
         {
@@ -170,6 +167,7 @@ namespace Library.Controllers
             return View(usage);
         }
 
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> History()
         {
             var applicationDbContext = _context.Usages
@@ -187,7 +185,7 @@ namespace Library.Controllers
             return View(await applicationDbContext.ToListAsync());
 
         }
-
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> GetBackBook(int? id)
         {
             if (id == null)
@@ -220,6 +218,7 @@ namespace Library.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> GetBook(int? id)
         {
             if (id == null)
@@ -248,6 +247,7 @@ namespace Library.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "librarian")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

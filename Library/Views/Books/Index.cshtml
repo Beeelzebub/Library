@@ -4,15 +4,21 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Список книг</h1>
 
 @if (User.IsInRole("librarian"))
 {
-    <p>
-        <a asp-controller="Books" asp-action="Create">Добавить книгу</a>
-        <a asp-controller="Authors" asp-action="Create">Добавить автора</a>
-        <a asp-controller="BookCopies" asp-action="Create">Добавить копию книги</a>
-    </p>
+<p>
+    <a asp-controller="Books" asp-action="Create">Добавить книгу</a>
+    <span> / </span>
+    <a asp-controller="Authors" asp-action="Create">Добавить автора</a>
+    <span> / </span>
+    <a asp-controller="BookCopies" asp-action="Create">Добавить копию книги</a>
+</p>
+}
+else
+{
+    <hr />
 }
 
 <table class="table">
@@ -52,8 +58,10 @@
                 <td>
                     @if (User.IsInRole("librarian"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                        <span> / </span>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                        <span> / </span>
                     }
                     <a asp-controller="BookCopies" asp-action="Index" asp-route-id="@item.Id">Выбрать</a>
                 </td>

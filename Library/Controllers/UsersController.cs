@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,7 @@ using Library.Models;
 using Library.ViewModels;
 using Library.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.Controllers
 {
@@ -22,9 +23,11 @@ namespace Library.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult Index() => View(_userManager.Users.ToList().Where(p => p.UserName != "admin"));
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult CreateLibrarian()
         {
@@ -32,12 +35,14 @@ namespace Library.Controllers
 
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult CreateReader() 
         {
             return View("~/Views/Users/Create.cshtml", new ReaderViewModel { Role = "reader" });
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Create(UserViewModel model)
         {
@@ -101,6 +106,7 @@ namespace Library.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -145,6 +151,7 @@ namespace Library.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(UserViewModel model)
         {
@@ -199,6 +206,7 @@ namespace Library.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
