@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Library.Models.Usage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>История заказов</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Книга
+            </th>
+            <th>
+                Дата выдачи
+            </th>
+            <th>
+                Дата сдачи
+            </th>
+            <th>
+                Читатель
+            </th>
+            <th>
+                Выдал
+            </th>
+            <th>
+                Принял
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @item.BookCopy.Book.Title
+            </td>
+            <td>
+                @item.StartDate.ToShortDateString()
+            </td>
+            <td>
+                @item.EndDate.ToShortDateString()
+            </td>
+            <td>
+                @item.Reader.User.FirstName @item.Reader.User.SecondName
+            </td>
+            <td>
+                @item.StartLibrarian.User.FirstName @item.StartLibrarian.User.SecondName
+            </td>
+            <td>
+                @item.EndLibrarian.User.FirstName @item.EndLibrarian.User.SecondName
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
