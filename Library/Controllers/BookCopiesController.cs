@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library.Data;
 using Library.Models;
+using Library.ViewModels;
+using System.IO;
 
 namespace Library.Controllers
 {
@@ -20,10 +22,43 @@ namespace Library.Controllers
         }
 
         // GET: BookCopies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            var applicationDbContext = _context.BookCopies.Include(b => b.Book).Include(b => b.Picture);
+            var applicationDbContext = _context.BookCopies.Where(b => b.BookId == id).Include(b => b.Book).Include(b => b.Picture);
+            ViewData["BookTitle"] = _context.Books.Find(id).Title; 
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> Book(string userName, int bookId)
+        {
+            var reader = _context.Readers.Where(r => r.User.UserName == userName)
+                .Include(r => r.User)
+                .FirstOrDefault();
+
+            var bookCopy = _context.BookCopies.Find(bookId);
+
+            if (bookCopy == null)
+            {
+                return NotFound();
+            }
+
+            Usage usage = new Usage
+            {
+                BookCopyId = bookCopy.Id,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(30),
+                ReaderId = reader.Id,
+                UsageStatusId = 1
+            };
+
+            bookCopy.IsInStock = false;
+
+            _context.BookCopies.Update(bookCopy);
+            _context.Usages.Add(usage);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Usages");
         }
 
         // GET: BookCopies/Details/5
@@ -49,8 +84,7 @@ namespace Library.Controllers
         // GET: BookCopies/Create
         public IActionResult Create()
         {
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id");
-            ViewData["PictureId"] = new SelectList(_context.Pictures, "Id", "Id");
+            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
             return View();
         }
 
@@ -59,17 +93,42 @@ namespace Library.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BookId,Notes,IsInStock,PictureId")] BookCopy bookCopy)
+        public async Task<IActionResult> Create(BookCopyViewModel model)
         {
             if (ModelState.IsValid)
             {
+                byte[] imageData = null;
+
+                if (model.Image != null)
+                {
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(model.Image.OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)model.Image.Length);
+                    }
+                }
+
+                Picture picture = new Picture { Image = imageData };
+                _context.Pictures.Add(picture);
+                await _context.SaveChangesAsync();
+
+                BookCopy bookCopy = new BookCopy
+                {
+                    BookId = model.BookId,
+                    Notes = model.Notes,
+                    PictureId = picture.Id,
+                    IsInStock = true
+                };
+
                 _context.Add(bookCopy);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+
+                return RedirectToAction("Index", "BookCopies", new { id = bookCopy.BookId });
             }
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", bookCopy.BookId);
-            ViewData["PictureId"] = new SelectList(_context.Pictures, "Id", "Id", bookCopy.PictureId);
-            return View(bookCopy);
+
+            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
+            return View(model);
         }
 
         // GET: BookCopies/Edit/5
@@ -120,14 +179,13 @@ namespace Library.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "BookCopies", new { id = bookCopy.BookId });
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", bookCopy.BookId);
             ViewData["PictureId"] = new SelectList(_context.Pictures, "Id", "Id", bookCopy.PictureId);
             return View(bookCopy);
         }
 
-        // GET: BookCopies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,27 +193,20 @@ namespace Library.Controllers
                 return NotFound();
             }
 
-            var bookCopy = await _context.BookCopies
-                .Include(b => b.Book)
-                .Include(b => b.Picture)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var bookCopy = await _context.BookCopies.FindAsync(id);
+
             if (bookCopy == null)
             {
                 return NotFound();
             }
 
-            return View(bookCopy);
-        }
-
-        // POST: BookCopies/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var bookCopy = await _context.BookCopies.FindAsync(id);
+            int bookId = bookCopy.BookId;
+            var picture = await _context.Pictures.FindAsync(bookCopy.PictureId);
             _context.BookCopies.Remove(bookCopy);
+            _context.Pictures.Remove(picture);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "BookCopies", new { id = bookId });
+
         }
 
         private bool BookCopyExists(int id)

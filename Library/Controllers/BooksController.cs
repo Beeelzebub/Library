@@ -22,7 +22,7 @@ namespace Library.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Books.Include(b => b.Author);
+            var applicationDbContext = _context.Books.Include(b => b.Author).Include(b => b.BookCopies);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -48,7 +48,13 @@ namespace Library.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "Id");
+            var authors = _context.Authors.Select(a => new
+            {
+                AuthorId = a.Id,
+                FullName = a.FirstName + " " + a.SecondName
+            }).ToList();
+
+            ViewData["AuthorId"] = new SelectList(authors, "AuthorId", "FullName");
             return View();
         }
 
@@ -82,7 +88,14 @@ namespace Library.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "Id", book.AuthorId);
+
+            var authors = _context.Authors.Select(a => new
+            {
+                AuthorId = a.Id,
+                FullName = a.FirstName + " " + a.SecondName
+            }).ToList();
+            ViewData["AuthorId"] = new SelectList(authors, "AuthorId", "FullName");
+
             return View(book);
         }
 
@@ -118,7 +131,14 @@ namespace Library.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "Id", book.AuthorId);
+
+            var authors = _context.Authors.Select(a => new
+            {
+                AuthorId = a.Id,
+                FullName = a.FirstName + " " + a.SecondName
+            }).ToList();
+            ViewData["AuthorId"] = new SelectList(authors, "AuthorId", "FullName");
+
             return View(book);
         }
 
@@ -146,9 +166,18 @@ namespace Library.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var pictures = _context.BookCopies
+                .Where(b => b.BookId == id)
+                .Include(b => b.Picture)
+                .Select(b => b.Picture);
+
             var book = await _context.Books.FindAsync(id);
+
             _context.Books.Remove(book);
+            _context.Pictures.RemoveRange(pictures);
+
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
